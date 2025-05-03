@@ -33,4 +33,4 @@ const {email, password} = req.body;
      });
  });      
             
-app.listen(5000,()=>console.log(`node server started using nodemon on port 5000`)); 
+app.listen(5000,()=>console.log(`Node server started using nodemon on port 5000`)); 
