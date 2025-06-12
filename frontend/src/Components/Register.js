@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Register() {
     const [name,setName] = useState('')
@@ -32,6 +32,7 @@ function Register() {
              <div className='col-md-5 mt-5'>
 
               <div className='bs'>
+                  <img src="/logo2.png" alt="Logo" style={{ width: '120px' }} />
                 <h2>Register</h2>
                 <input type="text" className='form-control mb-3' placeholder='name' required
                 value={name} onChange={(e)=>{setName(e.target.value)}}/>
@@ -46,6 +47,9 @@ function Register() {
                 value={userCountry} onChange={(e)=>{setUserCountry(e.target.value)}}></input>
 
                 <button className='btn btn-primary mt-3'onClick={handleSubmit}>Register</button>
+                <p className="mt-3">
+            Aleready have an account? <Link to="/login">Login</Link>
+          </p>
               </div>
              </div>
      </div>
