@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "./Article";
 import Loader from "./Loader";  
 import { Carousel } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Newsapp = () => {
   const [inputValue, setInputValue] = useState("india");
@@ -16,34 +17,60 @@ const Newsapp = () => {
   const [userName, setUserName] = useState("");
   const [userCountry, setUserCountry] = useState("");
 
-  const getdata = async () =>
-     {
+  const getdata = async () => {
     setLoading(true);
     setCheck(false);
     setNewsData(null);
     console.log(`Fetching news for: ${search}`);
     try {
+      // Use environment-based API endpoint
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? '/api/news' 
+        : 'http://localhost:5000/api/news';
+      
       const response = await fetch(
-        `https://newsapi.org/v2/everything?q=${search}&apiKey=${APIkey}`
+        `${apiUrl}?q=${encodeURIComponent(search)}`
       );
       const jsonData = await response.json();
-      if (jsonData.articles && jsonData.articles.length === 0) {
+      console.log('API response from /api/news:', jsonData); // Debug log
+      if (Array.isArray(jsonData.articles) && jsonData.articles.length === 0) {
         setCheck(true);
-      } else { setNewsData(jsonData.articles);  }
+      } else if (Array.isArray(jsonData.articles)) {
+        setNewsData(jsonData.articles);
+      } else {
+        setError("No articles found.");
+      }
     } catch (err) {
+      console.error('Fetch error:', err);
       setError("Failed to fetch data. Please try again.");
-    } finally {  setLoading(false); }};
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getTrendingNews = async () => {
     setLoading(true);
     try {
-      const response = await   
-       fetch( `https://newsapi.org/v2/everything?q=top-headlines&apiKey=${APIkey}`); 
-     const jsonData = await response.json();
-      if (jsonData.articles && jsonData.articles.length > 0) { setTrendingNews(jsonData.articles.slice(0, 10));}
-       else {setError("No articles found.");} }
-        catch (err) {setError("Failed to fetch data. Please try again.");}
-         finally {setLoading(false);}};
+      // Use environment-based API endpoint
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? '/api/news' 
+        : 'http://localhost:5000/api/news';
+      
+      const response = await fetch(`${apiUrl}?q=top-headlines`);
+      const jsonData = await response.json();
+      console.log('API response from /api/news (trending):', jsonData); // Debug log
+      if (Array.isArray(jsonData.articles) && jsonData.articles.length > 0) {
+        setTrendingNews(jsonData.articles.slice(0, 10));
+      } else {
+        setError("No articles found.");
+      }
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
         
   useEffect(() => {
     const loggedInUserName = localStorage.getItem("userName");
@@ -131,16 +158,16 @@ const Newsapp = () => {
                 </div>
               ) : (
                 <>
-                  <a href="/login">
+                  <Link to="/login">
                     <button className="btn btn-transparent rounded-pill text-white px-4 py-2 border-white mr-2">
                       Login
                     </button>
-                  </a>
-                  <a href="/register">
+                  </Link>
+                  <Link to="/register">
                     <button className="btn btn-transparent rounded-pill text-white border-white px-4 py-2">
                       Register
                     </button>
-                  </a>
+                  </Link>
                 </>
               )}
             </div>

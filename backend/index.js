@@ -1,4 +1,5 @@
 const express = require("express"); //init express
+const axios = require('axios');
 const app = express();   //create app
 const dbconfig = require('./connection/connection')
 const userModel = require('./models/user')
@@ -34,3 +35,25 @@ const {email, password} = req.body;
  });      
             
 app.listen(5000,()=>console.log(`Node server started using nodemon on port 5000`)); 
+
+app.get('/api/news', async (req, res) => {
+  const { q } = req.query;
+  try {
+    const response = await axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: q || 'india',
+        apiKey: '2c48b2bf9c9c4075aaf5f3420a652efa'
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    // Log the actual error for debugging
+    console.error('NewsAPI error:', error.response?.data || error.message);
+    // Forward the NewsAPI error message if available
+    if (error.response && error.response.data) {
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      res.status(500).json({ error: 'Failed to fetch news' });
+    }
+  }
+}); 

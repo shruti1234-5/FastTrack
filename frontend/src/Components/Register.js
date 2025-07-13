@@ -15,7 +15,7 @@ function Register() {
         alert("All fields are required!");
         return;
       }
-      axios.post('https://fasttrack-mxl0.onrender.com/register',{name,email,password,userCountry})
+      axios.post('http://localhost:5000/register',{name,email,password,userCountry})
       .then(result=>{
         console.log(result)
         console.log("Registration successful", result.data);
