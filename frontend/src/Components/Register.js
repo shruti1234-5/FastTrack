@@ -15,7 +15,10 @@ function Register() {
         alert("All fields are required!");
         return;
       }
-      axios.post('http://localhost:5000/register',{name,email,password,userCountry})
+      const apiUrl = process.env.NODE_ENV === 'production'
+        ? 'https://fasttrack-mxl0.onrender.com/register'
+        : 'http://localhost:5000/register';
+      axios.post(apiUrl,{name,email,password,userCountry})
       .then(result=>{
         console.log(result)
         console.log("Registration successful", result.data);

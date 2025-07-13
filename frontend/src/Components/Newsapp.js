@@ -25,9 +25,8 @@ const Newsapp = () => {
     try {
       // Use environment-based API endpoint
       const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/news' 
+        ? 'https://fasttrack-mxl0.onrender.com/api/news' 
         : 'http://localhost:5000/api/news';
-      
       const response = await fetch(
         `${apiUrl}?q=${encodeURIComponent(search)}`
       );
@@ -53,9 +52,8 @@ const Newsapp = () => {
     try {
       // Use environment-based API endpoint
       const apiUrl = process.env.NODE_ENV === 'production' 
-        ? '/api/news' 
+        ? 'https://fasttrack-mxl0.onrender.com/api/news' 
         : 'http://localhost:5000/api/news';
-      
       const response = await fetch(`${apiUrl}?q=top-headlines`);
       const jsonData = await response.json();
       console.log('API response from /api/news (trending):', jsonData); // Debug log

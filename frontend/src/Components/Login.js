@@ -9,7 +9,10 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/login', { email, password })
+    const apiUrl = process.env.NODE_ENV === 'production'
+      ? 'https://fasttrack-mxl0.onrender.com/login'
+      : 'http://localhost:5000/login';
+    axios.post(apiUrl, { email, password })
       .then(result => {
         console.log(result);
         if (result.data.status === 'success') {
